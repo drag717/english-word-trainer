@@ -141,6 +141,14 @@
       min-width: min(520px, 100%);
     }
 
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .stat {
       min-width: 0;
       padding: 13px 14px;
@@ -421,6 +429,41 @@
       border: 1px solid #f3cbc4;
     }
 
+    .support-btn {
+      min-height: 44px;
+      border-radius: 8px;
+      padding: 0 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: #173e31;
+      font-weight: 900;
+      text-decoration: none;
+      border: 1px solid rgba(224, 173, 59, .42);
+      background: linear-gradient(135deg, #fff7dd, #e7f5ee 62%, #edf7fb);
+      box-shadow: 0 10px 22px rgba(224, 173, 59, .18);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .support-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(31, 112, 86, .16);
+    }
+
+    .link-btn {
+      min-height: 44px;
+      border-radius: 8px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 800;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .72);
+    }
+
     .feedback {
       min-height: 42px;
       border-radius: 8px;
@@ -696,6 +739,90 @@
       text-align: center;
     }
 
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(18, 31, 26, .42);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .support-modal {
+      width: min(560px, 100%);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, .62);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .98), rgba(248, 252, 247, .94)),
+        linear-gradient(120deg, rgba(224, 173, 59, .18), transparent 55%);
+      box-shadow: 0 28px 90px rgba(18, 31, 26, .28);
+      padding: 22px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .modal-head h2 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+    }
+
+    .close-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      color: var(--muted);
+      background: #f2f6f1;
+      border: 1px solid #dce5dd;
+      font-size: 1.15rem;
+      font-weight: 900;
+    }
+
+    .support-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .support-option {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e9e3;
+      background: rgba(255, 255, 255, .9);
+      text-align: center;
+    }
+
+    .support-option strong {
+      display: block;
+      font-size: 1.25rem;
+    }
+
+    .support-option span {
+      display: block;
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    .support-note {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.45;
+    }
+
     @media (max-width: 980px) {
       .topbar,
       .layout,
@@ -720,6 +847,7 @@
 
       .stats-strip,
       .xp-grid,
+      .support-options,
       .toolbar,
       .answer-row,
       .actions,
@@ -733,6 +861,15 @@
 
       .toolbar {
         display: grid;
+      }
+
+      .top-actions {
+        justify-content: stretch;
+      }
+
+      .support-btn,
+      .link-btn {
+        width: 100%;
       }
 
       .segmented {
@@ -769,6 +906,11 @@
         <div class="stat"><strong id="xpStat">0</strong><span>XP</span></div>
         <div class="stat"><strong id="streak">0</strong><span>streak</span></div>
       </section>
+
+      <nav class="top-actions" aria-label="Ссылки приложения">
+        <button class="support-btn" id="supportBtn" type="button">★ Поддержать</button>
+        <a class="link-btn" href="./privacy.html">Privacy</a>
+      </nav>
     </header>
 
     <div class="layout">
@@ -867,6 +1009,27 @@
       </aside>
     </div>
   </main>
+
+  <div class="modal-backdrop" id="supportModal" aria-hidden="true">
+    <section class="support-modal" role="dialog" aria-modal="true" aria-labelledby="supportTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="supportTitle">Поддержать Word Trainer</h2>
+          <p class="subtitle">Если приложение помогает учить английский, можно поддержать развитие новых уроков и функций.</p>
+        </div>
+        <button class="close-btn" id="closeSupportBtn" type="button" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="support-options" aria-label="Варианты поддержки">
+        <div class="support-option"><strong>$2</strong><span>кофе для проекта</span></div>
+        <div class="support-option"><strong>$5</strong><span>новые уроки</span></div>
+        <div class="support-option"><strong>$10</strong><span>Pro-функции</span></div>
+      </div>
+
+      <a class="primary" id="supportLink" href="https://github.com/sponsors/drag717" target="_blank" rel="noopener">Перейти к поддержке</a>
+      <p class="support-note">Ссылка ведет на GitHub Sponsors. Если страница поддержки еще не настроена, позже можно заменить ссылку на Boosty, Stripe Payment Link, ЮMoney или другой сервис.</p>
+    </section>
+  </div>
 
   <script>
     const starterWords = [
@@ -1042,7 +1205,10 @@
       newEnglish: document.querySelector("#newEnglish"),
       newRussian: document.querySelector("#newRussian"),
       newCategory: document.querySelector("#newCategory"),
-      newExamples: document.querySelector("#newExamples")
+      newExamples: document.querySelector("#newExamples"),
+      supportBtn: document.querySelector("#supportBtn"),
+      closeSupportBtn: document.querySelector("#closeSupportBtn"),
+      supportModal: document.querySelector("#supportModal")
     };
 
     function load() {
@@ -1389,6 +1555,29 @@
       renderWordList();
       els.feedback.className = "feedback";
       els.feedback.textContent = "Прогресс сброшен.";
+    });
+
+    function openSupportModal() {
+      els.supportModal.classList.add("open");
+      els.supportModal.setAttribute("aria-hidden", "false");
+      els.closeSupportBtn.focus();
+    }
+
+    function closeSupportModal() {
+      els.supportModal.classList.remove("open");
+      els.supportModal.setAttribute("aria-hidden", "true");
+      els.supportBtn.focus();
+    }
+
+    els.supportBtn.addEventListener("click", openSupportModal);
+    els.closeSupportBtn.addEventListener("click", closeSupportModal);
+    els.supportModal.addEventListener("click", event => {
+      if (event.target === els.supportModal) closeSupportModal();
+    });
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape" && els.supportModal.classList.contains("open")) {
+        closeSupportModal();
+      }
     });
 
     load();

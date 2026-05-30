@@ -1,0 +1,1408 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Word Trainer</title>
+  <meta name="description" content="Тренажер английских слов с уроками, XP, уровнями и прогрессом.">
+  <meta name="theme-color" content="#1f7056">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Word Trainer">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18201f;
+      --muted: #64706e;
+      --line: #dce4df;
+      --paper: #f8faf5;
+      --panel: #ffffff;
+      --mint: #4ca682;
+      --mint-dark: #1f7056;
+      --coral: #ee7465;
+      --gold: #e0ad3b;
+      --sky: #5d9fd0;
+      --plum: #6f5c91;
+      --shadow: 0 22px 70px rgba(31, 53, 46, .16);
+      --shadow-soft: 0 10px 26px rgba(31, 53, 46, .1);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      position: relative;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(24, 32, 31, .045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(24, 32, 31, .04) 1px, transparent 1px),
+        linear-gradient(135deg, #f6f7ef 0%, #fffaf0 42%, #edf7fb 100%);
+      background-size: 36px 36px, 36px 36px, auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(110deg, rgba(31, 112, 86, .12), transparent 34%),
+        linear-gradient(250deg, rgba(238, 116, 101, .1), transparent 32%),
+        linear-gradient(180deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, .18));
+      z-index: -1;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(93, 159, 208, .36);
+      outline-offset: 2px;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 38px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding: 16px;
+      border: 1px solid rgba(24, 32, 31, .08);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .72);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, #173e31 0%, #1f7056 62%, #e0ad3b 100%);
+      color: #fff7dd;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(31, 112, 86, .28);
+      flex: 0 0 auto;
+      outline: 1px solid rgba(255, 255, 255, .55);
+      outline-offset: -4px;
+    }
+
+    h1 {
+      font-size: clamp(1.65rem, 3vw, 2.45rem);
+      line-height: 1;
+      margin: 0 0 6px;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: .98rem;
+    }
+
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(94px, 1fr));
+      gap: 10px;
+      min-width: min(520px, 100%);
+    }
+
+    .stat {
+      min-width: 0;
+      padding: 13px 14px;
+      border: 1px solid rgba(23, 33, 28, .08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(248, 251, 247, .78));
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 18px rgba(31, 53, 46, .07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--mint);
+    }
+
+    .stat:nth-child(2)::before {
+      background: var(--sky);
+    }
+
+    .stat:nth-child(3)::before {
+      background: var(--gold);
+    }
+
+    .stat:nth-child(4)::before {
+      background: var(--coral);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.45rem;
+      line-height: 1.1;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: .76rem;
+      margin-top: 4px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .trainer {
+      min-height: 620px;
+      padding: 20px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(250, 252, 248, .86));
+      border: 1px solid rgba(23, 33, 28, .08);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .segmented {
+      display: inline-grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 6px;
+      border-radius: 8px;
+      background: #edf3ef;
+      border: 1px solid #dfe8e1;
+      min-width: min(360px, 100%);
+    }
+
+    .segmented button {
+      min-height: 40px;
+      border-radius: 6px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 750;
+      transition: transform .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease;
+    }
+
+    .segmented button.active {
+      color: #fff;
+      background: linear-gradient(135deg, #173e31, #1f7056);
+      box-shadow: 0 8px 18px rgba(31, 112, 86, .2);
+    }
+
+    .segmented button:hover,
+    .primary:hover,
+    .secondary:hover,
+    .ghost:hover,
+    .danger:hover {
+      transform: translateY(-1px);
+    }
+
+    .select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    select {
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      padding: 0 34px 0 12px;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .card-area {
+      display: grid;
+      align-content: stretch;
+      gap: 16px;
+    }
+
+    .flashcard {
+      min-height: 322px;
+      border-radius: 8px;
+      padding: 32px;
+      border: 1px solid rgba(24, 32, 31, .08);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(246, 251, 248, .9) 46%, rgba(239, 248, 251, .92)),
+        repeating-linear-gradient(0deg, transparent 0 35px, rgba(76, 166, 130, .08) 36px);
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .95), 0 18px 46px rgba(31, 53, 46, .1);
+    }
+
+    .flashcard::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(31, 112, 86, .1);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .flashcard::after {
+      content: "";
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      width: 76px;
+      height: 76px;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, #f3c56a 0 22%, transparent 22% 31%, #6eb492 31% 53%, transparent 53% 62%, #ef806d 62% 84%, transparent 84%),
+        linear-gradient(#223b32 0 0);
+      background-size: 100% 68%, 100% 8px;
+      background-position: center 4px, center 64px;
+      background-repeat: no-repeat;
+      opacity: .9;
+      transform: rotate(4deg);
+      filter: drop-shadow(0 10px 15px rgba(31, 53, 46, .12));
+    }
+
+    .badge {
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: #163f31;
+      background: linear-gradient(135deg, #e5f3eb, #fff4d8);
+      border: 1px solid rgba(31, 112, 86, .12);
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .word {
+      margin: 0;
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      line-height: .98;
+      letter-spacing: 0;
+      max-width: 12ch;
+      overflow-wrap: anywhere;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, .8);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 1.06rem;
+      min-height: 1.4em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .answer-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 10px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .96);
+      color: var(--ink);
+      padding: 13px 14px;
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(31, 53, 46, .04);
+      transition: border-color .18s, box-shadow .18s, background .18s;
+    }
+
+    input[type="text"]:focus, textarea:focus, select:focus {
+      border-color: var(--mint);
+      box-shadow: 0 0 0 4px rgba(79, 167, 131, .16);
+    }
+
+    .primary, .secondary, .ghost, .danger {
+      min-height: 46px;
+      border-radius: 8px;
+      font-weight: 850;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--mint-dark), #2b8b69);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(31, 112, 86, .22);
+    }
+
+    .secondary {
+      background: linear-gradient(180deg, #f4f8f3, #e8f2ec);
+      color: #173e31;
+      border: 1px solid #d9e6dd;
+    }
+
+    .ghost {
+      background: rgba(255, 255, 255, .72);
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .danger {
+      background: linear-gradient(180deg, #fff6f3, #ffecea);
+      color: #a83d2d;
+      border: 1px solid #f3cbc4;
+    }
+
+    .feedback {
+      min-height: 42px;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--muted);
+      background: rgba(244, 247, 242, .9);
+      border: 1px solid #e2e9e1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
+    }
+
+    .feedback.ok {
+      color: #1c6a4f;
+      background: #e8f6ef;
+      border-color: #c5e7d6;
+    }
+
+    .feedback.bad {
+      color: #a83d2d;
+      background: #fff0ed;
+      border-color: #f4c9c1;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .practice-side {
+      border-radius: 8px;
+      border: 1px solid rgba(24, 32, 31, .08);
+      background:
+        linear-gradient(180deg, rgba(248, 251, 246, .94), rgba(255, 255, 255, .76));
+      padding: 18px;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .meter {
+      display: grid;
+      gap: 8px;
+    }
+
+    .meter-top {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e4ebe4;
+      box-shadow: inset 0 1px 2px rgba(31, 53, 46, .08);
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint), var(--sky), var(--gold));
+      transition: width .25s ease;
+    }
+
+    .level-bar span {
+      background: linear-gradient(90deg, var(--coral), var(--gold), var(--mint));
+    }
+
+    .xp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .xp-grid div {
+      padding: 12px;
+      border: 1px solid #e2e9e3;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .86);
+      box-shadow: 0 6px 14px rgba(31, 53, 46, .05);
+    }
+
+    .xp-grid strong {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1.1;
+    }
+
+    .xp-grid span {
+      display: block;
+      color: var(--muted);
+      font-size: .78rem;
+      margin-top: 4px;
+    }
+
+    .mini-title {
+      margin: 0;
+      font-size: .95rem;
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+
+    .examples {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .examples li {
+      padding: 11px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .9);
+      border: 1px solid #e3e9e3;
+      color: #3c4944;
+      line-height: 1.35;
+      box-shadow: 0 6px 14px rgba(31, 53, 46, .05);
+    }
+
+    aside {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border-radius: 8px;
+      border: 1px solid rgba(23, 33, 28, .08);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(250, 252, 248, .84));
+      box-shadow: var(--shadow);
+      padding: 18px;
+      backdrop-filter: blur(18px);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+    }
+
+    .word-list {
+      display: grid;
+      gap: 8px;
+      max-height: 300px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .lesson-list {
+      display: grid;
+      gap: 9px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .lesson-card {
+      width: 100%;
+      min-height: 74px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      text-align: left;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #e2e9e3;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 6px 14px rgba(31, 53, 46, .05);
+      color: var(--ink);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .lesson-card:hover {
+      transform: translateY(-1px);
+      border-color: #cbdcd1;
+      box-shadow: 0 10px 22px rgba(31, 53, 46, .08);
+    }
+
+    .lesson-card.active {
+      border-color: rgba(31, 112, 86, .36);
+      background: linear-gradient(135deg, #f4fbf6, #fff8e7);
+    }
+
+    .lesson-card strong,
+    .lesson-card span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .lesson-card span {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 3px;
+    }
+
+    .word-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px 12px;
+      border-radius: 8px;
+      border: 1px solid #e2e9e3;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 6px 14px rgba(31, 53, 46, .05);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .word-item:hover {
+      transform: translateY(-1px);
+      border-color: #cbdcd1;
+      box-shadow: 0 10px 22px rgba(31, 53, 46, .08);
+    }
+
+    .word-item strong,
+    .word-item span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .word-item span {
+      color: var(--muted);
+      font-size: .84rem;
+      margin-top: 2px;
+    }
+
+    .pill {
+      min-width: 42px;
+      text-align: center;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #eef5f8;
+      color: #2e6186;
+      font-size: .8rem;
+      font-weight: 850;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .empty {
+      color: var(--muted);
+      border: 1px dashed #cdd8d0;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .topbar,
+      .layout,
+      .stage {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        display: grid;
+      }
+
+      .stats-strip {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        width: min(100% - 20px, 1180px);
+        padding-top: 16px;
+      }
+
+      .stats-strip,
+      .xp-grid,
+      .toolbar,
+      .answer-row,
+      .actions,
+      .two {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .toolbar {
+        display: grid;
+      }
+
+      .segmented {
+        grid-template-columns: 1fr;
+      }
+
+      .trainer,
+      .panel,
+      .flashcard {
+        padding: 16px;
+      }
+
+      .flashcard::after {
+        opacity: .28;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">Aa</div>
+        <div>
+          <h1>English Word Trainer</h1>
+          <p class="subtitle">Карточки, перевод, примеры и прогресс без лишнего шума.</p>
+        </div>
+      </div>
+
+      <section class="stats-strip" aria-label="Статистика">
+        <div class="stat"><strong id="totalWords">0</strong><span>слов</span></div>
+        <div class="stat"><strong id="levelStat">1</strong><span>уровень</span></div>
+        <div class="stat"><strong id="xpStat">0</strong><span>XP</span></div>
+        <div class="stat"><strong id="streak">0</strong><span>streak</span></div>
+      </section>
+    </header>
+
+    <div class="layout">
+      <section class="trainer">
+        <div class="toolbar">
+          <div class="segmented" role="tablist" aria-label="Режим тренировки">
+            <button class="active" data-mode="en-ru" type="button">EN → RU</button>
+            <button data-mode="ru-en" type="button">RU → EN</button>
+            <button data-mode="mixed" type="button">Mixed</button>
+          </div>
+
+          <label class="select-wrap">
+            Урок
+            <select id="categorySelect">
+              <option value="all">Все слова</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="stage">
+          <div class="card-area">
+            <article class="flashcard" aria-live="polite">
+              <div class="badge" id="categoryBadge">Daily</div>
+              <h2 class="word" id="promptWord">ready</h2>
+              <div class="hint" id="hintText">Введите перевод и нажмите Проверить.</div>
+            </article>
+
+            <form class="answer-box" id="answerForm">
+              <div class="answer-row">
+                <input id="answerInput" type="text" autocomplete="off" placeholder="Ваш ответ">
+                <button class="primary" type="submit">✓ Проверить</button>
+              </div>
+              <div class="feedback" id="feedback">Можно отвечать на русском или английском, зависит от режима.</div>
+              <div class="actions">
+                <button class="secondary" id="showAnswerBtn" type="button">◐ Показать</button>
+                <button class="ghost" id="skipBtn" type="button">→ Пропустить</button>
+                <button class="ghost" id="shuffleBtn" type="button">⟳ Перемешать</button>
+              </div>
+            </form>
+          </div>
+
+          <aside class="practice-side">
+            <div class="meter">
+              <div class="meter-top"><span id="levelLabel">Уровень 1</span><strong id="xpToNext">100 XP</strong></div>
+              <div class="bar level-bar" aria-hidden="true"><span id="levelBar"></span></div>
+            </div>
+
+            <div class="meter">
+              <div class="meter-top"><span>Освоение набора</span><strong id="masteryLabel">0%</strong></div>
+              <div class="bar" aria-hidden="true"><span id="masteryBar"></span></div>
+            </div>
+
+            <div class="xp-grid" aria-label="Прогресс">
+              <div><strong id="todayXp">0</strong><span>XP сегодня</span></div>
+              <div><strong id="accuracy">0%</strong><span>точность</span></div>
+              <div><strong id="bestStreak">0</strong><span>лучшая серия</span></div>
+            </div>
+
+            <div>
+              <p class="mini-title">Примеры</p>
+              <ul class="examples" id="examples"></ul>
+            </div>
+
+            <div>
+              <p class="mini-title">Подсказка</p>
+              <p class="subtitle" id="sideHint">Слова с ошибками чаще возвращаются в тренировку.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <aside>
+        <section class="panel">
+          <h2>Уроки</h2>
+          <div class="lesson-list" id="lessonList"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Словарь</h2>
+          <div class="word-list" id="wordList"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Добавить слово</h2>
+          <form class="form-grid" id="addWordForm">
+            <div class="two">
+              <input id="newEnglish" type="text" placeholder="English">
+              <input id="newRussian" type="text" placeholder="Русский">
+            </div>
+            <input id="newCategory" type="text" placeholder="Категория">
+            <textarea id="newExamples" placeholder="Примеры через точку с запятой"></textarea>
+            <button class="primary" type="submit">+ Добавить</button>
+            <button class="danger" id="resetBtn" type="button">Сбросить прогресс</button>
+          </form>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const starterWords = [
+      { en: "reliable", ru: "надежный", category: "Work", examples: ["She is a reliable teammate.", "We need reliable data."] },
+      { en: "deadline", ru: "срок", category: "Work", examples: ["The deadline is Friday.", "Can we move the deadline?"] },
+      { en: "curious", ru: "любопытный", category: "Daily", examples: ["I am curious about this idea.", "Children are naturally curious."] },
+      { en: "improve", ru: "улучшать", category: "Daily", examples: ["Practice helps you improve.", "How can we improve the app?"] },
+      { en: "budget", ru: "бюджет", category: "Money", examples: ["Let's check the budget.", "The project is over budget."] },
+      { en: "expense", ru: "расход", category: "Money", examples: ["Rent is a monthly expense.", "Track every expense."] },
+      { en: "healthy", ru: "здоровый", category: "Health", examples: ["A healthy habit starts small.", "This meal is healthy."] },
+      { en: "strength", ru: "сила", category: "Health", examples: ["Training builds strength.", "Her strength is patience."] },
+      { en: "journey", ru: "путешествие", category: "Travel", examples: ["The journey took two days.", "Learning is a journey."] },
+      { en: "ticket", ru: "билет", category: "Travel", examples: ["I bought a train ticket.", "Show your ticket at the gate."] },
+      { en: "focus", ru: "фокус", category: "Daily", examples: ["Focus on one task.", "Music helps me focus."] },
+      { en: "choice", ru: "выбор", category: "Daily", examples: ["It was a difficult choice.", "You have a choice."] },
+      { en: "ability", ru: "способность", category: "Core A2", examples: ["She has the ability to learn fast.", "This job requires strong ability."] },
+      { en: "accept", ru: "принимать", category: "Core A2", examples: ["Please accept my answer.", "He accepted the offer."] },
+      { en: "achieve", ru: "достигать", category: "Core B1", examples: ["You can achieve your goal.", "They achieved great results."] },
+      { en: "advice", ru: "совет", category: "Core A2", examples: ["Thank you for your advice.", "I need some advice."] },
+      { en: "allow", ru: "позволять", category: "Core A2", examples: ["The app allows you to add words.", "My parents allow me to travel."] },
+      { en: "almost", ru: "почти", category: "Core A1", examples: ["I am almost ready.", "The lesson is almost over."] },
+      { en: "although", ru: "хотя", category: "Core B1", examples: ["Although it was late, we continued.", "I liked it, although it was difficult."] },
+      { en: "appear", ru: "появляться", category: "Core B1", examples: ["New words appear in the list.", "A message appeared on the screen."] },
+      { en: "area", ru: "область", category: "Core A2", examples: ["This area is quiet.", "Choose your area of study."] },
+      { en: "arrive", ru: "прибывать", category: "Core A1", examples: ["The train will arrive soon.", "We arrived at night."] },
+      { en: "available", ru: "доступный", category: "Core B1", examples: ["The room is available today.", "Is this option available?"] },
+      { en: "avoid", ru: "избегать", category: "Core B1", examples: ["Avoid common mistakes.", "He avoids sugar."] },
+      { en: "basic", ru: "основной", category: "Core A2", examples: ["Learn the basic rules first.", "This is a basic word."] },
+      { en: "believe", ru: "верить", category: "Core A2", examples: ["I believe you.", "She believes in progress."] },
+      { en: "borrow", ru: "занимать", category: "Core A2", examples: ["Can I borrow your pen?", "He borrowed money from a friend."] },
+      { en: "break", ru: "перерыв", category: "Core A1", examples: ["Let's take a break.", "The glass may break."] },
+      { en: "bring", ru: "приносить", category: "Core A1", examples: ["Bring your notebook.", "She brought coffee."] },
+      { en: "build", ru: "строить", category: "Core A2", examples: ["We build better habits.", "They built a small house."] },
+      { en: "careful", ru: "осторожный", category: "Core A2", examples: ["Be careful with this word.", "She is a careful driver."] },
+      { en: "cause", ru: "причина", category: "Core B1", examples: ["What is the cause of the problem?", "Rain caused delays."] },
+      { en: "certain", ru: "определенный", category: "Core B1", examples: ["I am certain about it.", "Certain words are very useful."] },
+      { en: "challenge", ru: "вызов", category: "Core B1", examples: ["Learning English is a challenge.", "This task was a challenge."] },
+      { en: "change", ru: "изменение", category: "Core A1", examples: ["Small changes help.", "Can you change the plan?"] },
+      { en: "compare", ru: "сравнивать", category: "Core B1", examples: ["Compare these two answers.", "We compared the prices."] },
+      { en: "complete", ru: "завершать", category: "Core A2", examples: ["Complete the exercise.", "The project is complete."] },
+      { en: "consider", ru: "рассматривать", category: "Core B1", examples: ["Consider another option.", "We considered your idea."] },
+      { en: "continue", ru: "продолжать", category: "Core A2", examples: ["Continue practicing every day.", "The story continues."] },
+      { en: "create", ru: "создавать", category: "Core A2", examples: ["Create your own word list.", "Artists create new worlds."] },
+      { en: "culture", ru: "культура", category: "Core A2", examples: ["Language is part of culture.", "I enjoy learning about culture."] },
+      { en: "decide", ru: "решать", category: "Core A2", examples: ["Decide what to learn next.", "We decided to stay."] },
+      { en: "describe", ru: "описывать", category: "Core A2", examples: ["Describe your day.", "Can you describe the picture?"] },
+      { en: "develop", ru: "развивать", category: "Core B1", examples: ["Develop a daily habit.", "The city developed quickly."] },
+      { en: "different", ru: "разный", category: "Core A1", examples: ["These words are different.", "We have different ideas."] },
+      { en: "difficult", ru: "сложный", category: "Core A1", examples: ["This word is difficult.", "It was a difficult question."] },
+      { en: "discuss", ru: "обсуждать", category: "Core B1", examples: ["Let's discuss the plan.", "They discussed the result."] },
+      { en: "during", ru: "во время", category: "Core A2", examples: ["I listened during the lesson.", "It rained during the night."] },
+      { en: "early", ru: "рано", category: "Core A1", examples: ["I wake up early.", "We arrived early."] },
+      { en: "effect", ru: "эффект", category: "Core B1", examples: ["Practice has a strong effect.", "The effect was clear."] },
+      { en: "enough", ru: "достаточно", category: "Core A2", examples: ["That is enough for today.", "Do you have enough time?"] },
+      { en: "environment", ru: "окружающая среда", category: "Core B1", examples: ["We should protect the environment.", "A quiet environment helps learning."] },
+      { en: "especially", ru: "особенно", category: "Core B1", examples: ["I like reading, especially short stories.", "This is especially useful."] },
+      { en: "experience", ru: "опыт", category: "Core A2", examples: ["Experience helps you improve.", "It was a good experience."] },
+      { en: "explain", ru: "объяснять", category: "Core A2", examples: ["Can you explain this rule?", "She explained the answer."] },
+      { en: "famous", ru: "известный", category: "Core A2", examples: ["He is a famous writer.", "This is a famous song."] },
+      { en: "foreign", ru: "иностранный", category: "Core B1", examples: ["English is a foreign language for me.", "She studies foreign films."] },
+      { en: "forget", ru: "забывать", category: "Core A1", examples: ["Don't forget this word.", "I forgot my password."] },
+      { en: "however", ru: "однако", category: "Core B1", examples: ["It is hard. However, it is useful.", "I wanted to go; however, I was tired."] },
+      { en: "include", ru: "включать", category: "Core B1", examples: ["The list includes common words.", "Please include examples."] },
+      { en: "increase", ru: "увеличивать", category: "Core B1", examples: ["Practice can increase confidence.", "Prices increased this year."] },
+      { en: "instead", ru: "вместо", category: "Core A2", examples: ["Try this word instead.", "I drank tea instead of coffee."] },
+      { en: "interest", ru: "интерес", category: "Core A2", examples: ["Interest makes learning easier.", "She has an interest in music."] },
+      { en: "knowledge", ru: "знание", category: "Core B1", examples: ["Knowledge grows with practice.", "He has deep knowledge of history."] },
+      { en: "language", ru: "язык", category: "Core A1", examples: ["English is a useful language.", "What languages do you speak?"] },
+      { en: "learn", ru: "учить", category: "Core A1", examples: ["I learn English every day.", "Learn five new words."] },
+      { en: "level", ru: "уровень", category: "Core A2", examples: ["Choose your level.", "Her English level is high."] },
+      { en: "likely", ru: "вероятный", category: "Core B1", examples: ["It is likely to rain.", "This word is likely to appear often."] },
+      { en: "matter", ru: "иметь значение", category: "Core B1", examples: ["Small habits matter.", "It does not matter."] },
+      { en: "meaning", ru: "значение", category: "Core A2", examples: ["What is the meaning of this word?", "Context changes meaning."] },
+      { en: "memory", ru: "память", category: "Core A2", examples: ["Repetition helps memory.", "I have a good memory for names."] },
+      { en: "necessary", ru: "необходимый", category: "Core B1", examples: ["Sleep is necessary.", "It is necessary to practice."] },
+      { en: "notice", ru: "замечать", category: "Core A2", examples: ["Notice the spelling.", "Did you notice the mistake?"] },
+      { en: "opinion", ru: "мнение", category: "Core A2", examples: ["What is your opinion?", "In my opinion, it works."] },
+      { en: "ordinary", ru: "обычный", category: "Core B1", examples: ["It was an ordinary day.", "Use ordinary words first."] },
+      { en: "perhaps", ru: "возможно", category: "Core B1", examples: ["Perhaps you are right.", "Perhaps we need more time."] },
+      { en: "possible", ru: "возможный", category: "Core A2", examples: ["Everything is possible with practice.", "Is it possible today?"] },
+      { en: "prepare", ru: "готовить", category: "Core A2", examples: ["Prepare for the test.", "She prepared dinner."] },
+      { en: "probably", ru: "вероятно", category: "Core A2", examples: ["It will probably work.", "He is probably at home."] },
+      { en: "purpose", ru: "цель", category: "Core B1", examples: ["What is the purpose of this task?", "The purpose is practice."] },
+      { en: "quickly", ru: "быстро", category: "Core A1", examples: ["Read the word quickly.", "She learns quickly."] },
+      { en: "reason", ru: "причина", category: "Core A2", examples: ["What is the reason?", "There is a reason for this."] },
+      { en: "receive", ru: "получать", category: "Core A2", examples: ["You receive feedback after each answer.", "I received a message."] },
+      { en: "recent", ru: "недавний", category: "Core B1", examples: ["Recent lessons are easier to remember.", "This is a recent change."] },
+      { en: "remember", ru: "помнить", category: "Core A1", examples: ["Remember this example.", "I remember her name."] },
+      { en: "repeat", ru: "повторять", category: "Core A1", examples: ["Repeat the word aloud.", "Can you repeat that?"] },
+      { en: "result", ru: "результат", category: "Core A2", examples: ["Practice improves the result.", "The result was good."] },
+      { en: "schedule", ru: "расписание", category: "Core B1", examples: ["Check your schedule.", "My schedule is full today."] },
+      { en: "several", ru: "несколько", category: "Core A2", examples: ["Learn several words today.", "I have several questions."] },
+      { en: "similar", ru: "похожий", category: "Core A2", examples: ["These words are similar.", "We have similar interests."] },
+      { en: "simple", ru: "простой", category: "Core A1", examples: ["Start with simple words.", "The answer is simple."] },
+      { en: "society", ru: "общество", category: "Core B1", examples: ["Language changes society.", "We live in a modern society."] },
+      { en: "solution", ru: "решение", category: "Core B1", examples: ["Find a better solution.", "This solution is simple."] },
+      { en: "suggest", ru: "предлагать", category: "Core B1", examples: ["I suggest daily practice.", "She suggested a new idea."] },
+      { en: "support", ru: "поддержка", category: "Core B1", examples: ["Support helps people learn.", "Thank you for your support."] },
+      { en: "therefore", ru: "поэтому", category: "Core B1", examples: ["I practice; therefore, I improve.", "It was late; therefore, we left."] },
+      { en: "through", ru: "через", category: "Core A2", examples: ["Learn through examples.", "We walked through the park."] },
+      { en: "together", ru: "вместе", category: "Core A1", examples: ["Let's learn together.", "They work together."] },
+      { en: "towards", ru: "к", category: "Core B1", examples: ["Move towards your goal.", "She walked towards the door."] },
+      { en: "understand", ru: "понимать", category: "Core A1", examples: ["I understand this word.", "Do you understand the question?"] },
+      { en: "useful", ru: "полезный", category: "Core A2", examples: ["This word is useful.", "Examples are useful."] },
+      { en: "usually", ru: "обычно", category: "Core A1", examples: ["I usually study in the morning.", "It usually works."] },
+      { en: "various", ru: "различный", category: "Core B1", examples: ["Learn words from various topics.", "There are various ways to answer."] },
+      { en: "whether", ru: "ли", category: "Core B1", examples: ["I don't know whether it is correct.", "Check whether you remember it."] },
+      { en: "within", ru: "в пределах", category: "Core B1", examples: ["Finish within ten minutes.", "The answer is within the text."] },
+      { en: "without", ru: "без", category: "Core A2", examples: ["Practice without fear.", "I left without my phone."] }
+    ];
+
+    const lessons = [
+      { id: "all", title: "Все слова", level: "Mixed", description: "Полный словарь", categories: null },
+      { id: "level-a1", title: "A1 Starter", level: "A1", description: "Самые базовые слова", categories: ["Core A1"] },
+      { id: "level-a2", title: "A2 Builder", level: "A2", description: "Повседневные слова", categories: ["Core A2"] },
+      { id: "level-b1", title: "B1 Progress", level: "B1", description: "Слова для уверенной речи", categories: ["Core B1"] },
+      { id: "daily", title: "Daily Life", level: "A1-A2", description: "Фокус, выбор, привычки", categories: ["Daily"] },
+      { id: "work", title: "Work Basics", level: "A2", description: "Работа и дедлайны", categories: ["Work"] },
+      { id: "money", title: "Money", level: "A2", description: "Бюджет и расходы", categories: ["Money"] },
+      { id: "health", title: "Health", level: "A2", description: "Здоровье и тренировки", categories: ["Health"] },
+      { id: "travel", title: "Travel", level: "A1-A2", description: "Поездки и билеты", categories: ["Travel"] },
+      { id: "custom", title: "Мои слова", level: "Custom", description: "Слова, добавленные вручную", custom: true }
+    ];
+
+    const storageKey = "english-word-trainer-v1";
+    const normalize = value => value.trim().toLowerCase().replaceAll("ё", "е");
+
+    const state = {
+      mode: "en-ru",
+      category: "all",
+      queue: [],
+      current: null,
+      direction: "en-ru",
+      words: [],
+      stats: {
+        attempts: 0,
+        correct: 0,
+        trainedToday: 0,
+        xp: 0,
+        xpToday: 0,
+        streak: 0,
+        bestStreak: 0,
+        date: new Date().toDateString(),
+        progress: {}
+      }
+    };
+
+    const els = {
+      totalWords: document.querySelector("#totalWords"),
+      levelStat: document.querySelector("#levelStat"),
+      xpStat: document.querySelector("#xpStat"),
+      todayXp: document.querySelector("#todayXp"),
+      accuracy: document.querySelector("#accuracy"),
+      streak: document.querySelector("#streak"),
+      bestStreak: document.querySelector("#bestStreak"),
+      levelLabel: document.querySelector("#levelLabel"),
+      xpToNext: document.querySelector("#xpToNext"),
+      levelBar: document.querySelector("#levelBar"),
+      masteryLabel: document.querySelector("#masteryLabel"),
+      masteryBar: document.querySelector("#masteryBar"),
+      promptWord: document.querySelector("#promptWord"),
+      hintText: document.querySelector("#hintText"),
+      categoryBadge: document.querySelector("#categoryBadge"),
+      answerForm: document.querySelector("#answerForm"),
+      answerInput: document.querySelector("#answerInput"),
+      feedback: document.querySelector("#feedback"),
+      examples: document.querySelector("#examples"),
+      sideHint: document.querySelector("#sideHint"),
+      categorySelect: document.querySelector("#categorySelect"),
+      lessonList: document.querySelector("#lessonList"),
+      wordList: document.querySelector("#wordList"),
+      addWordForm: document.querySelector("#addWordForm"),
+      newEnglish: document.querySelector("#newEnglish"),
+      newRussian: document.querySelector("#newRussian"),
+      newCategory: document.querySelector("#newCategory"),
+      newExamples: document.querySelector("#newExamples")
+    };
+
+    function load() {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+      const savedWords = saved?.words?.length ? saved.words : [];
+      const savedKeys = new Set(savedWords.map(word => normalize(word.en)));
+      const newStarterWords = starterWords.filter(word => !savedKeys.has(normalize(word.en)));
+      state.words = savedWords.length ? [...savedWords, ...newStarterWords] : starterWords;
+      state.stats = { ...state.stats, ...(saved?.stats || {}) };
+      if (state.stats.date !== new Date().toDateString()) {
+        state.stats.trainedToday = 0;
+        state.stats.xpToday = 0;
+        state.stats.date = new Date().toDateString();
+      }
+      normalizeSelectedLesson();
+      if (newStarterWords.length) save();
+    }
+
+    function save() {
+      localStorage.setItem(storageKey, JSON.stringify({
+        words: state.words,
+        stats: state.stats
+      }));
+    }
+
+    function filteredWords() {
+      const lesson = lessons.find(item => item.id === state.category) || lessons[0];
+      if (lesson.id === "all") return state.words;
+      if (lesson.custom) {
+        const lessonCategories = new Set(lessons.flatMap(item => item.categories || []));
+        return state.words.filter(word => !lessonCategories.has(word.category));
+      }
+      return state.words.filter(word => lesson.categories?.includes(word.category));
+    }
+
+    function normalizeSelectedLesson() {
+      const legacyMap = {
+        "Core A1": "level-a1",
+        "Core A2": "level-a2",
+        "Core B1": "level-b1",
+        Daily: "daily",
+        Work: "work",
+        Money: "money",
+        Health: "health",
+        Travel: "travel",
+        Custom: "custom"
+      };
+      if (legacyMap[state.category]) state.category = legacyMap[state.category];
+      if (!lessons.some(lesson => lesson.id === state.category)) state.category = "all";
+    }
+
+    function scoreFor(word) {
+      const progress = state.stats.progress[word.en] || { correct: 0, wrong: 0 };
+      return progress.correct - progress.wrong * 1.6;
+    }
+
+    function xpForLevel(level) {
+      return 80 + (level - 1) * 45;
+    }
+
+    function levelInfo(totalXp) {
+      let level = 1;
+      let remaining = Math.max(0, totalXp);
+      let needed = xpForLevel(level);
+      while (remaining >= needed) {
+        remaining -= needed;
+        level += 1;
+        needed = xpForLevel(level);
+      }
+      return {
+        level,
+        current: remaining,
+        needed,
+        percent: Math.round(remaining / needed * 100)
+      };
+    }
+
+    function awardXp(isCorrect) {
+      const base = isCorrect ? 10 : 2;
+      const streakBonus = isCorrect && state.stats.streak > 0 && state.stats.streak % 5 === 0 ? 5 : 0;
+      const earned = base + streakBonus;
+      state.stats.xp += earned;
+      state.stats.xpToday += earned;
+      return earned;
+    }
+
+    function buildQueue() {
+      const pool = filteredWords();
+      state.queue = [...pool].sort((a, b) => scoreFor(a) - scoreFor(b) || Math.random() - .5);
+    }
+
+    function nextCard() {
+      if (!state.queue.length) buildQueue();
+      state.current = state.queue.shift() || filteredWords()[0] || null;
+      state.direction = state.mode === "mixed" ? (Math.random() > .5 ? "en-ru" : "ru-en") : state.mode;
+      renderCard();
+    }
+
+    function expectedAnswer() {
+      return state.direction === "en-ru" ? state.current.ru : state.current.en;
+    }
+
+    function promptValue() {
+      return state.direction === "en-ru" ? state.current.en : state.current.ru;
+    }
+
+    function currentLessonTitle() {
+      const lesson = lessons.find(item => item.id === state.category) || lessons[0];
+      return `${lesson.level} · ${lesson.title}`;
+    }
+
+    function markProgress(isCorrect) {
+      const key = state.current.en;
+      const progress = state.stats.progress[key] || { correct: 0, wrong: 0 };
+      if (isCorrect) progress.correct += 1;
+      else progress.wrong += 1;
+      state.stats.progress[key] = progress;
+      state.stats.attempts += 1;
+      state.stats.trainedToday += 1;
+      state.stats.streak = isCorrect ? state.stats.streak + 1 : 0;
+      state.stats.bestStreak = Math.max(state.stats.bestStreak || 0, state.stats.streak);
+      const earnedXp = awardXp(isCorrect);
+      if (isCorrect) state.stats.correct += 1;
+      if (!isCorrect) state.queue.splice(Math.min(2, state.queue.length), 0, state.current);
+      save();
+      renderStats();
+      renderLessons();
+      renderWordList();
+      return earnedXp;
+    }
+
+    function checkAnswer() {
+      if (!state.current) return;
+      const userAnswer = normalize(els.answerInput.value);
+      if (!userAnswer) {
+        els.feedback.className = "feedback bad";
+        els.feedback.textContent = "Сначала введите ответ.";
+        return;
+      }
+      const correct = normalize(expectedAnswer());
+      const accepted = correct.split(",").map(part => normalize(part));
+      const isCorrect = accepted.some(answer => answer === userAnswer);
+      const earnedXp = markProgress(isCorrect);
+      els.feedback.className = isCorrect ? "feedback ok" : "feedback bad";
+      els.feedback.textContent = isCorrect
+        ? `Верно. +${earnedXp} XP. Отличный ответ.`
+        : `Почти. +${earnedXp} XP за попытку. Правильный ответ: ${expectedAnswer()}.`;
+      window.setTimeout(nextCard, isCorrect ? 650 : 1150);
+    }
+
+    function renderStats() {
+      const level = levelInfo(state.stats.xp || 0);
+      els.totalWords.textContent = state.words.length;
+      els.levelStat.textContent = level.level;
+      els.xpStat.textContent = state.stats.xp || 0;
+      els.todayXp.textContent = state.stats.xpToday || 0;
+      els.accuracy.textContent = state.stats.attempts
+        ? `${Math.round(state.stats.correct / state.stats.attempts * 100)}%`
+        : "0%";
+      els.streak.textContent = state.stats.streak;
+      els.bestStreak.textContent = state.stats.bestStreak || 0;
+      els.levelLabel.textContent = `Уровень ${level.level}`;
+      els.xpToNext.textContent = `${level.needed - level.current} XP до следующего`;
+      els.levelBar.style.width = `${level.percent}%`;
+
+      const words = filteredWords();
+      const mastered = words.filter(word => scoreFor(word) >= 3).length;
+      const mastery = words.length ? Math.round(mastered / words.length * 100) : 0;
+      els.masteryLabel.textContent = `${mastery}%`;
+      els.masteryBar.style.width = `${mastery}%`;
+    }
+
+    function renderCard() {
+      if (!state.current) {
+        els.promptWord.textContent = "empty";
+        els.hintText.textContent = "Добавьте первое слово, чтобы начать тренировку.";
+        els.categoryBadge.textContent = "Dictionary";
+        els.examples.innerHTML = "";
+        return;
+      }
+      els.promptWord.textContent = promptValue();
+      els.categoryBadge.textContent = state.current.category || "Custom";
+      els.hintText.textContent = state.direction === "en-ru" ? "Переведите на русский." : "Переведите на английский.";
+      els.answerInput.value = "";
+      els.answerInput.placeholder = state.direction === "en-ru" ? "Например: надежный" : "For example: reliable";
+      els.feedback.className = "feedback";
+      els.feedback.textContent = "Введите ответ и нажмите Проверить.";
+      els.examples.innerHTML = (state.current.examples || [])
+        .map(example => `<li>${escapeHtml(example)}</li>`)
+        .join("");
+      els.sideHint.textContent = state.direction === "en-ru"
+        ? `Урок: ${currentLessonTitle()}. Тренируем понимание английского слова.`
+        : `Урок: ${currentLessonTitle()}. Тренируем активное вспоминание английского.`;
+      els.answerInput.focus();
+      renderStats();
+    }
+
+    function renderCategories() {
+      els.categorySelect.innerHTML = lessons
+        .map(lesson => `<option value="${escapeHtml(lesson.id)}">${escapeHtml(lesson.level)} · ${escapeHtml(lesson.title)}</option>`)
+        .join("");
+      els.categorySelect.value = state.category;
+    }
+
+    function lessonWords(lesson) {
+      if (lesson.id === "all") return state.words;
+      if (lesson.custom) {
+        const lessonCategories = new Set(lessons.flatMap(item => item.categories || []));
+        return state.words.filter(word => !lessonCategories.has(word.category));
+      }
+      return state.words.filter(word => lesson.categories?.includes(word.category));
+    }
+
+    function lessonMastery(lesson) {
+      const words = lessonWords(lesson);
+      if (!words.length) return 0;
+      const mastered = words.filter(word => scoreFor(word) >= 3).length;
+      return Math.round(mastered / words.length * 100);
+    }
+
+    function renderLessons() {
+      els.lessonList.innerHTML = lessons.map(lesson => {
+        const count = lessonWords(lesson).length;
+        const mastery = lessonMastery(lesson);
+        const active = lesson.id === state.category ? " active" : "";
+        return `
+          <button class="lesson-card${active}" type="button" data-lesson="${escapeHtml(lesson.id)}">
+            <div>
+              <strong>${escapeHtml(lesson.level)} · ${escapeHtml(lesson.title)}</strong>
+              <span>${escapeHtml(lesson.description)} · ${count} слов</span>
+            </div>
+            <div class="pill">${mastery}%</div>
+          </button>`;
+      }).join("");
+    }
+
+    function renderWordList() {
+      const words = filteredWords();
+      els.wordList.innerHTML = words.length
+        ? words.map(word => {
+          const progress = state.stats.progress[word.en] || { correct: 0, wrong: 0 };
+          const score = Math.max(0, Math.min(5, progress.correct - progress.wrong));
+          return `
+            <div class="word-item">
+              <div><strong>${escapeHtml(word.en)}</strong><span>${escapeHtml(word.ru)} · ${escapeHtml(word.category || "Custom")}</span></div>
+              <div class="pill">${score}/5</div>
+            </div>`;
+        }).join("")
+        : `<div class="empty">В этом наборе пока нет слов.</div>`;
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    document.querySelectorAll("[data-mode]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-mode]").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        state.mode = button.dataset.mode;
+        nextCard();
+      });
+    });
+
+    els.categorySelect.addEventListener("change", () => {
+      state.category = els.categorySelect.value;
+      buildQueue();
+      nextCard();
+      renderLessons();
+      renderWordList();
+    });
+
+    els.lessonList.addEventListener("click", event => {
+      const button = event.target.closest("[data-lesson]");
+      if (!button) return;
+      state.category = button.dataset.lesson;
+      els.categorySelect.value = state.category;
+      buildQueue();
+      nextCard();
+      renderLessons();
+      renderWordList();
+    });
+
+    els.answerForm.addEventListener("submit", event => {
+      event.preventDefault();
+      checkAnswer();
+    });
+
+    document.querySelector("#showAnswerBtn").addEventListener("click", () => {
+      if (!state.current) return;
+      els.feedback.className = "feedback";
+      els.feedback.textContent = `Ответ: ${expectedAnswer()}.`;
+      els.answerInput.focus();
+    });
+
+    document.querySelector("#skipBtn").addEventListener("click", nextCard);
+
+    document.querySelector("#shuffleBtn").addEventListener("click", () => {
+      buildQueue();
+      nextCard();
+    });
+
+    els.addWordForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const en = els.newEnglish.value.trim();
+      const ru = els.newRussian.value.trim();
+      if (!en || !ru) return;
+      state.words.push({
+        en,
+        ru,
+        category: els.newCategory.value.trim() || "Custom",
+        examples: els.newExamples.value.split(";").map(item => item.trim()).filter(Boolean)
+      });
+      els.addWordForm.reset();
+      save();
+      renderCategories();
+      renderLessons();
+      renderWordList();
+      buildQueue();
+      nextCard();
+    });
+
+    document.querySelector("#resetBtn").addEventListener("click", () => {
+      state.stats = {
+        attempts: 0,
+        correct: 0,
+        trainedToday: 0,
+        xp: 0,
+        xpToday: 0,
+        streak: 0,
+        bestStreak: 0,
+        date: new Date().toDateString(),
+        progress: {}
+      };
+      save();
+      renderStats();
+      renderLessons();
+      renderWordList();
+      els.feedback.className = "feedback";
+      els.feedback.textContent = "Прогресс сброшен.";
+    });
+
+    load();
+    renderCategories();
+    renderLessons();
+    renderWordList();
+    buildQueue();
+    nextCard();
+
+    if ("serviceWorker" in navigator && ["http:", "https:"].includes(location.protocol)) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

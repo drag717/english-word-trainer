@@ -1,0 +1,12 @@
+{
+  "name": "english-word-trainer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite . --host 127.0.0.1 --envDir .",
+    "build": "vite build . --outDir dist --emptyOutDir --envDir ."
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

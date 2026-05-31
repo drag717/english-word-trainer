@@ -887,6 +887,369 @@
       }
 
     }
+  
+
+    .chat-section {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .chat-card {
+      border: 1px solid rgba(23, 33, 28, .08);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .86);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .chat-panel {
+      padding: 18px;
+    }
+
+    .chat-panel h2,
+    .chat-window h2 {
+      margin: 0;
+      font-size: 1.12rem;
+      line-height: 1.2;
+    }
+
+    .chat-kicker {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.45;
+    }
+
+    .chat-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: #edf3ef;
+      color: var(--mint-dark);
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .chat-status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(224, 173, 59, .16);
+    }
+
+    .chat-status.online::before {
+      background: var(--mint);
+      box-shadow: 0 0 0 4px rgba(76, 166, 130, .18);
+    }
+
+    .chat-status.offline::before {
+      background: var(--coral);
+      box-shadow: 0 0 0 4px rgba(238, 116, 101, .18);
+    }
+
+    .chat-auth {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .persona-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .persona-card {
+      position: relative;
+      display: block;
+    }
+
+    .persona-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .persona-card span {
+      display: grid;
+      place-items: center;
+      min-height: 48px;
+      border-radius: 8px;
+      border: 1px solid #dfe8e1;
+      background: #f8fbf7;
+      color: var(--muted);
+      font-weight: 850;
+      transition: border .16s ease, background .16s ease, color .16s ease, transform .16s ease;
+    }
+
+    .persona-card input:checked + span {
+      border-color: rgba(31, 112, 86, .48);
+      background: linear-gradient(135deg, #173e31, #1f7056);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(31, 112, 86, .2);
+    }
+
+    .persona-card span:hover {
+      transform: translateY(-1px);
+    }
+
+    .chat-auth input,
+    .chat-composer textarea {
+      width: 100%;
+      border: 1px solid #dfe8e1;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .96);
+      color: var(--ink);
+    }
+
+    .chat-auth input {
+      min-height: 44px;
+      padding: 0 12px;
+    }
+
+    .chat-auth-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .chat-hint {
+      display: none;
+      margin: 0;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff7e4;
+      color: #775820;
+      font-size: .82rem;
+      line-height: 1.42;
+    }
+
+    .chat-hint.show {
+      display: block;
+    }
+
+    .chat-window {
+      min-height: 640px;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .chat-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 18px;
+      border-bottom: 1px solid rgba(23, 33, 28, .08);
+      background:
+        linear-gradient(135deg, rgba(31, 112, 86, .08), transparent 48%),
+        rgba(255, 255, 255, .78);
+    }
+
+    .chat-people {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--mint-dark), var(--sky));
+      box-shadow: 0 8px 16px rgba(31, 112, 86, .18);
+    }
+
+    .chat-avatar.her {
+      background: linear-gradient(135deg, var(--coral), var(--plum));
+    }
+
+    .chat-messages {
+      min-height: 0;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background:
+        linear-gradient(180deg, rgba(248, 250, 245, .72), rgba(237, 247, 251, .58));
+    }
+
+    .chat-empty {
+      margin: auto;
+      max-width: 420px;
+      text-align: center;
+      padding: 28px;
+      border-radius: 8px;
+      border: 1px dashed rgba(31, 112, 86, .32);
+      background: rgba(255, 255, 255, .74);
+    }
+
+    .chat-empty strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .chat-empty p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .message-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .message-row.mine {
+      justify-content: flex-end;
+    }
+
+    .message-bubble {
+      max-width: min(72%, 560px);
+      padding: 10px 12px 8px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid rgba(23, 33, 28, .08);
+      box-shadow: 0 8px 16px rgba(31, 53, 46, .07);
+    }
+
+    .message-row.mine .message-bubble {
+      color: #fff;
+      background: linear-gradient(135deg, #1f7056, #2d8d6b);
+      border-color: rgba(255, 255, 255, .28);
+    }
+
+    .message-name {
+      display: block;
+      margin-bottom: 4px;
+      font-size: .74rem;
+      font-weight: 850;
+      opacity: .76;
+    }
+
+    .message-text {
+      margin: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.42;
+    }
+
+    .message-meta {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      align-items: center;
+      margin-top: 6px;
+      font-size: .7rem;
+      opacity: .72;
+    }
+
+    .typing-line {
+      min-height: 24px;
+      padding: 0 18px;
+      color: var(--muted);
+      font-size: .86rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .typing-dot {
+      display: inline-flex;
+      gap: 3px;
+      margin-left: 7px;
+    }
+
+    .typing-dot span {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--mint);
+      animation: typingPulse 1s infinite ease-in-out;
+    }
+
+    .typing-dot span:nth-child(2) {
+      animation-delay: .14s;
+    }
+
+    .typing-dot span:nth-child(3) {
+      animation-delay: .28s;
+    }
+
+    @keyframes typingPulse {
+      0%, 80%, 100% { transform: translateY(0); opacity: .35; }
+      40% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    .chat-composer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid rgba(23, 33, 28, .08);
+      background: rgba(255, 255, 255, .82);
+    }
+
+    .chat-composer textarea {
+      min-height: 46px;
+      max-height: 150px;
+      resize: vertical;
+      padding: 11px 12px;
+    }
+
+    .toast-stack {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      display: grid;
+      gap: 10px;
+      width: min(360px, calc(100vw - 36px));
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 12px 14px;
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, #173e31, #1f7056);
+      box-shadow: var(--shadow);
+      animation: toastIn .22s ease both;
+    }
+
+    .toast strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .toast span {
+      display: block;
+      opacity: .84;
+      font-size: .86rem;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
   </style>
 </head>
 <body>
@@ -908,6 +1271,7 @@
       </section>
 
       <nav class="top-actions" aria-label="Ссылки приложения">
+        <button class="link-btn" id="chatJumpBtn" type="button">Чат</button>
         <button class="support-btn" id="supportBtn" type="button">★ Поддержать</button>
         <a class="link-btn" href="./privacy.html">Privacy</a>
       </nav>
@@ -1008,6 +1372,65 @@
         </section>
       </aside>
     </div>
+
+    <section class="chat-section" id="coupleChat" aria-label="Чат для двоих">
+      <aside class="chat-card chat-panel">
+        <h2>Чат для двоих</h2>
+        <p class="chat-kicker">Личный диалог между Муслимом и Она через Supabase Auth, Database и Realtime.</p>
+        <div class="chat-status offline" id="chatConnectionStatus">Supabase не подключен</div>
+
+        <form class="chat-auth" id="chatAuthForm">
+          <div class="persona-grid" aria-label="Кто пишет">
+            <label class="persona-card">
+              <input type="radio" name="persona" value="Муслим" checked>
+              <span>Муслим</span>
+            </label>
+            <label class="persona-card">
+              <input type="radio" name="persona" value="Она">
+              <span>Она</span>
+            </label>
+          </div>
+          <input id="chatEmail" type="email" autocomplete="email" placeholder="Email для входа">
+          <input id="chatPassword" type="password" autocomplete="current-password" placeholder="Пароль">
+          <div class="chat-auth-actions">
+            <button class="primary" id="chatSignInBtn" type="submit">Войти</button>
+            <button class="secondary" id="chatSignUpBtn" type="button">Создать</button>
+          </div>
+          <button class="ghost" id="chatSignOutBtn" type="button">Выйти</button>
+          <button class="secondary" id="enableNotificationsBtn" type="button">Включить уведомления</button>
+          <p class="chat-hint" id="notificationHint">Уведомления запрещены. Откройте настройки сайта в браузере, найдите Notifications/Уведомления и переключите на Allow/Разрешить.</p>
+          <p class="chat-hint show" id="supabaseSetupHint">Добавьте VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY в .env, затем запустите проект через Vite. Пока ключи пустые, чат работает только как интерфейс без backend.</p>
+        </form>
+      </aside>
+
+      <section class="chat-card chat-window">
+        <header class="chat-head">
+          <div>
+            <h2>Муслим и Она</h2>
+            <p class="chat-kicker" id="chatSessionLabel">Войдите как один из двух пользователей.</p>
+          </div>
+          <div class="chat-people" aria-hidden="true">
+            <div class="chat-avatar">М</div>
+            <div class="chat-avatar her">О</div>
+          </div>
+        </header>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-empty">
+            <strong>Пока тихо</strong>
+            <p>Первое сообщение появится здесь: с датой, временем, статусом и красивой мессенджерной раскладкой.</p>
+          </div>
+        </div>
+
+        <div class="typing-line" id="typingIndicator"></div>
+
+        <form class="chat-composer" id="chatMessageForm">
+          <textarea id="chatMessageInput" autocomplete="off" placeholder="Написать сообщение..." disabled></textarea>
+          <button class="primary" id="sendMessageBtn" type="submit" disabled>Отправить</button>
+        </form>
+      </section>
+    </section>
+
   </main>
 
   <div class="modal-backdrop" id="supportModal" aria-hidden="true">
@@ -1031,7 +1454,7 @@
     </section>
   </div>
 
-  <script>
+  <script type="module">
     const starterWords = [
       { en: "reliable", ru: "надежный", category: "Work", examples: ["She is a reliable teammate.", "We need reliable data."] },
       { en: "deadline", ru: "срок", category: "Work", examples: ["The deadline is Friday.", "Can we move the deadline?"] },
@@ -2493,12 +2916,358 @@
       }
     });
 
+
+    const chatConfig = {
+      url: window.__SUPABASE_URL__ || import.meta.env?.VITE_SUPABASE_URL || "",
+      anonKey: window.__SUPABASE_ANON_KEY__ || import.meta.env?.VITE_SUPABASE_ANON_KEY || ""
+    };
+
+    const chatState = {
+      client: null,
+      user: null,
+      persona: localStorage.getItem("couple-chat-persona") || "Муслим",
+      messages: [],
+      channel: null,
+      typingTimer: null,
+      typingClearTimer: null,
+      notificationAsked: localStorage.getItem("couple-chat-notification-asked") === "true"
+    };
+
+    Object.assign(els, {
+      chatJumpBtn: document.querySelector("#chatJumpBtn"),
+      chatConnectionStatus: document.querySelector("#chatConnectionStatus"),
+      chatAuthForm: document.querySelector("#chatAuthForm"),
+      chatEmail: document.querySelector("#chatEmail"),
+      chatPassword: document.querySelector("#chatPassword"),
+      chatSignUpBtn: document.querySelector("#chatSignUpBtn"),
+      chatSignOutBtn: document.querySelector("#chatSignOutBtn"),
+      enableNotificationsBtn: document.querySelector("#enableNotificationsBtn"),
+      notificationHint: document.querySelector("#notificationHint"),
+      supabaseSetupHint: document.querySelector("#supabaseSetupHint"),
+      chatSessionLabel: document.querySelector("#chatSessionLabel"),
+      chatMessages: document.querySelector("#chatMessages"),
+      typingIndicator: document.querySelector("#typingIndicator"),
+      chatMessageForm: document.querySelector("#chatMessageForm"),
+      chatMessageInput: document.querySelector("#chatMessageInput"),
+      sendMessageBtn: document.querySelector("#sendMessageBtn")
+    });
+
+    function setChatStatus(text, state = "offline") {
+      els.chatConnectionStatus.textContent = text;
+      els.chatConnectionStatus.className = `chat-status ${state}`;
+    }
+
+    function selectedPersona() {
+      return document.querySelector('input[name="persona"]:checked')?.value || "Муслим";
+    }
+
+    function setComposerEnabled(enabled) {
+      els.chatMessageInput.disabled = !enabled;
+      els.sendMessageBtn.disabled = !enabled;
+    }
+
+    function formatMessageDate(value) {
+      return new Intl.DateTimeFormat("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(new Date(value));
+    }
+
+    function renderChatMessages() {
+      if (!chatState.messages.length) {
+        els.chatMessages.innerHTML = `
+          <div class="chat-empty">
+            <strong>Пока тихо</strong>
+            <p>Напишите первое сообщение. История будет храниться в Supabase и появится на втором устройстве.</p>
+          </div>`;
+        return;
+      }
+
+      els.chatMessages.innerHTML = chatState.messages.map(message => {
+        const mine = message.sender_id === chatState.user?.id;
+        const status = message.is_read ? "прочитано" : "отправлено";
+        return `
+          <div class="message-row ${mine ? "mine" : "theirs"}">
+            <article class="message-bubble">
+              <span class="message-name">${escapeHtml(message.sender_name || "Без имени")}</span>
+              <p class="message-text">${escapeHtml(message.text)}</p>
+              <div class="message-meta">
+                <time datetime="${escapeHtml(message.created_at)}">${escapeHtml(formatMessageDate(message.created_at))}</time>
+                <span>${escapeHtml(status)}</span>
+              </div>
+            </article>
+          </div>`;
+      }).join("");
+      els.chatMessages.scrollTop = els.chatMessages.scrollHeight;
+    }
+
+    function upsertMessage(message) {
+      const index = chatState.messages.findIndex(item => item.id === message.id);
+      if (index >= 0) chatState.messages[index] = message;
+      else chatState.messages.push(message);
+      chatState.messages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      renderChatMessages();
+    }
+
+    function showToast(title, text) {
+      let stack = document.querySelector(".toast-stack");
+      if (!stack) {
+        stack = document.createElement("div");
+        stack.className = "toast-stack";
+        document.body.append(stack);
+      }
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span>`;
+      stack.append(toast);
+      window.setTimeout(() => toast.remove(), 4200);
+    }
+
+    async function showMessageNotification(message) {
+      const text = message.text.length > 90 ? `${message.text.slice(0, 90)}...` : message.text;
+      if (document.visibilityState === "visible") {
+        showToast(`Новое сообщение от ${message.sender_name}`, text);
+        return;
+      }
+      if (Notification.permission !== "granted") return;
+      const registration = await navigator.serviceWorker?.ready.catch(() => null);
+      if (registration?.showNotification) {
+        registration.showNotification(`Новое сообщение от ${message.sender_name}`, {
+          body: text,
+          icon: "./icons/icon-192.png",
+          badge: "./icons/icon-32.png",
+          tag: "couple-chat-message",
+          data: { url: location.href }
+        });
+      } else {
+        new Notification(`Новое сообщение от ${message.sender_name}`, { body: text, icon: "./icons/icon-192.png" });
+      }
+    }
+
+    async function requestNotificationPermission() {
+      if (!("Notification" in window)) {
+        els.notificationHint.textContent = "Этот браузер не поддерживает уведомления.";
+        els.notificationHint.classList.add("show");
+        return;
+      }
+      localStorage.setItem("couple-chat-notification-asked", "true");
+      chatState.notificationAsked = true;
+      const permission = await Notification.requestPermission();
+      els.notificationHint.classList.toggle("show", permission === "denied");
+      if (permission === "granted") showToast("Уведомления включены", "Новые сообщения будут появляться поверх приложения.");
+    }
+
+    async function loadMessages() {
+      const { data, error } = await chatState.client
+        .from("messages")
+        .select("id,sender_id,sender_name,text,created_at,is_read")
+        .order("created_at", { ascending: true })
+        .limit(250);
+      if (error) {
+        setChatStatus("Ошибка загрузки сообщений", "offline");
+        showToast("Supabase", error.message);
+        return;
+      }
+      chatState.messages = data || [];
+      renderChatMessages();
+      markIncomingAsRead();
+    }
+
+    async function markIncomingAsRead() {
+      if (!chatState.client || !chatState.user) return;
+      await chatState.client
+        .from("messages")
+        .update({ is_read: true })
+        .neq("sender_id", chatState.user.id)
+        .eq("is_read", false);
+    }
+
+    async function subscribeToMessages() {
+      if (chatState.channel) await chatState.client.removeChannel(chatState.channel);
+      chatState.channel = chatState.client.channel("couple-chat-room");
+      chatState.channel
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, payload => {
+          upsertMessage(payload.new);
+          if (payload.new.sender_id !== chatState.user?.id) {
+            showMessageNotification(payload.new);
+            markIncomingAsRead();
+          }
+        })
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "messages" }, payload => {
+          upsertMessage(payload.new);
+        })
+        .on("broadcast", { event: "typing" }, ({ payload }) => {
+          if (!payload || payload.sender_id === chatState.user?.id) return;
+          els.typingIndicator.innerHTML = payload.is_typing
+            ? `${escapeHtml(payload.sender_name)} печатает<span class="typing-dot"><span></span><span></span><span></span></span>`
+            : "";
+          clearTimeout(chatState.typingClearTimer);
+          chatState.typingClearTimer = window.setTimeout(() => {
+            els.typingIndicator.textContent = "";
+          }, 2200);
+        })
+        .subscribe(status => {
+          if (status === "SUBSCRIBED") setChatStatus("Realtime подключен", "online");
+        });
+    }
+
+    async function refreshChatSession() {
+      const { data } = await chatState.client.auth.getSession();
+      chatState.user = data.session?.user || null;
+      if (!chatState.user) {
+        setComposerEnabled(false);
+        els.chatSessionLabel.textContent = "Войдите как Муслим или Она.";
+        setChatStatus("Ожидает входа", "offline");
+        renderChatMessages();
+        return;
+      }
+      chatState.persona = chatState.user.user_metadata?.display_name || chatState.persona;
+      els.chatSessionLabel.textContent = `Вы вошли как ${chatState.persona}`;
+      setComposerEnabled(true);
+      setChatStatus("Загрузка сообщений", "");
+      await loadMessages();
+      await subscribeToMessages();
+      if (!chatState.notificationAsked && "Notification" in window && Notification.permission === "default") {
+        requestNotificationPermission();
+      }
+    }
+
+    async function signInChat(event) {
+      event.preventDefault();
+      if (!chatState.client) return;
+      const email = els.chatEmail.value.trim();
+      const password = els.chatPassword.value;
+      if (!email || !password) {
+        showToast("Чат", "Введите email и пароль.");
+        return;
+      }
+      chatState.persona = selectedPersona();
+      localStorage.setItem("couple-chat-persona", chatState.persona);
+      const { error } = await chatState.client.auth.signInWithPassword({ email, password });
+      if (error) {
+        showToast("Ошибка входа", error.message);
+        return;
+      }
+      await chatState.client.auth.updateUser({ data: { display_name: chatState.persona } });
+      await refreshChatSession();
+    }
+
+    async function signUpChat() {
+      if (!chatState.client) return;
+      const email = els.chatEmail.value.trim();
+      const password = els.chatPassword.value;
+      if (!email || !password) {
+        showToast("Чат", "Введите email и пароль для создания пользователя.");
+        return;
+      }
+      chatState.persona = selectedPersona();
+      localStorage.setItem("couple-chat-persona", chatState.persona);
+      const { error } = await chatState.client.auth.signUp({
+        email,
+        password,
+        options: { data: { display_name: chatState.persona } }
+      });
+      if (error) {
+        showToast("Ошибка регистрации", error.message);
+        return;
+      }
+      showToast("Пользователь создан", "Если в Supabase включено подтверждение email, подтвердите письмо перед входом.");
+      await refreshChatSession();
+    }
+
+    async function signOutChat() {
+      if (!chatState.client) return;
+      await chatState.client.auth.signOut();
+      chatState.user = null;
+      chatState.messages = [];
+      setComposerEnabled(false);
+      renderChatMessages();
+      setChatStatus("Ожидает входа", "offline");
+      els.chatSessionLabel.textContent = "Войдите как один из двух пользователей.";
+    }
+
+    async function sendChatMessage(event) {
+      event.preventDefault();
+      if (!chatState.client || !chatState.user) return;
+      const text = els.chatMessageInput.value.trim();
+      if (!text) return;
+      els.chatMessageInput.value = "";
+      await sendTyping(false);
+      const senderName = chatState.user.user_metadata?.display_name || chatState.persona;
+      const { error } = await chatState.client.from("messages").insert({
+        sender_id: chatState.user.id,
+        sender_name: senderName,
+        text,
+        is_read: false
+      });
+      if (error) showToast("Сообщение не отправлено", error.message);
+    }
+
+    async function sendTyping(isTyping) {
+      if (!chatState.channel || !chatState.user) return;
+      await chatState.channel.send({
+        type: "broadcast",
+        event: "typing",
+        payload: {
+          sender_id: chatState.user.id,
+          sender_name: chatState.user.user_metadata?.display_name || chatState.persona,
+          is_typing: isTyping
+        }
+      });
+    }
+
+    async function initChat() {
+      document.querySelectorAll('input[name="persona"]').forEach(input => {
+        input.checked = input.value === chatState.persona;
+        input.addEventListener("change", () => {
+          chatState.persona = selectedPersona();
+          localStorage.setItem("couple-chat-persona", chatState.persona);
+        });
+      });
+      els.chatJumpBtn?.addEventListener("click", () => {
+        document.querySelector("#coupleChat").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      els.chatAuthForm.addEventListener("submit", signInChat);
+      els.chatSignUpBtn.addEventListener("click", signUpChat);
+      els.chatSignOutBtn.addEventListener("click", signOutChat);
+      els.enableNotificationsBtn.addEventListener("click", requestNotificationPermission);
+      els.chatMessageForm.addEventListener("submit", sendChatMessage);
+      els.chatMessageInput.addEventListener("input", () => {
+        sendTyping(true);
+        clearTimeout(chatState.typingTimer);
+        chatState.typingTimer = window.setTimeout(() => sendTyping(false), 1200);
+      });
+
+      if (!chatConfig.url || !chatConfig.anonKey) {
+        els.supabaseSetupHint.classList.add("show");
+        setChatStatus("Нужны ключи Supabase", "offline");
+        setComposerEnabled(false);
+        return;
+      }
+
+      try {
+        const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");
+        chatState.client = createClient(chatConfig.url, chatConfig.anonKey);
+        els.supabaseSetupHint.classList.remove("show");
+        chatState.client.auth.onAuthStateChange(() => refreshChatSession());
+        await refreshChatSession();
+      } catch (error) {
+        setChatStatus("Supabase SDK не загрузился", "offline");
+        showToast("Чат", error.message);
+      }
+    }
+
+
     load();
     renderCategories();
     renderLessons();
     renderWordList();
     buildQueue();
     nextCard();
+    initChat();
 
     if ("serviceWorker" in navigator && ["http:", "https:"].includes(location.protocol)) {
       window.addEventListener("load", () => {
